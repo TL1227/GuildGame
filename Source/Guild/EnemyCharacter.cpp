@@ -12,6 +12,7 @@ AEnemyCharacter::AEnemyCharacter()
 
 	GetCapsuleComponent()->InitCapsuleSize(ExploreCapsuleRadius, 96.0f);
 	CombatantComponent = CreateDefaultSubobject<UCombatant>(TEXT("CombatantComponent"));
+	CombatantComponent->SetTeamId(1);
 }
 
 // Called when the game starts or when spawned

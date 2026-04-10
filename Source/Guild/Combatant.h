@@ -25,6 +25,9 @@ public:
 	FTurnDelegate OnTurnStart;
 	void StartTurn() const;
 
+	void SetTeamId(int id);
+	int GetTeamId();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -38,6 +41,8 @@ protected:
 	UPROPERTY(EditAnywhere, BluePrintReadWrite)
 	int BaseAttackDamage;
 
+	UPROPERTY(EditAnywhere, BluePrintReadWrite)
+	int TeamId = 0;
 
 public:	
 	// Called every frame

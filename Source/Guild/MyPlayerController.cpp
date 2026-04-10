@@ -20,6 +20,7 @@
 #include "MovementCircle.h"
 #include "CombatSystem.h"
 #include "Combatant.h"
+#include "Team.h"
 
 AMyPlayerController::AMyPlayerController()
 {
@@ -252,25 +253,20 @@ void AMyPlayerController::StartCombat()
 
 		BPSetEnemiesToInCombat(); //Change this in the future
 
+		//Get All actors that are combatants
+		TArray<AActor*> combatants;
+		UGameplayStatics::GetAllActorsOfClass(
+			GetWorld(),
+			AActor::StaticClass(),
+			combatants
+		);
+
 		TArray<AActor*> participants;
-
-		//Get all our guildcharacters
-		TArray<AActor*> GuildChars;
-		UGameplayStatics::GetAllActorsOfClass(
-			GetWorld(),
-			AGuildCharacter::StaticClass(),
-			GuildChars
-		);
-		participants.Append(GuildChars);
-
-		//Get all our EnemyChars
-		TArray<AActor*> EnemyChars;
-		UGameplayStatics::GetAllActorsOfClass(
-			GetWorld(),
-			AEnemyCharacter::StaticClass(),
-			EnemyChars
-		);
-		participants.Append(EnemyChars);
+		for (auto* combatant : combatants)
+			if (combatant->GetComponentByClass<UCombatant>())
+			{
+				participants.Emplace(combatant);
+			}
 
 		CombatSystem->StartBattle(participants);
 	}

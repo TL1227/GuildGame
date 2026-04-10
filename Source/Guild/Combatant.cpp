@@ -30,6 +30,9 @@ float UCombatant::GetHealthAsPercentage()
 	return (float)HealthPoints / (float)MaxHealth;
 }
 
+void UCombatant::SetTeamId(int id) { TeamId = id; }
+int UCombatant::GetTeamId() { return TeamId; }
+
 int UCombatant::GetBaseAttackDamage() { return BaseAttackDamage; }
 
 void UCombatant::StartTurn() const

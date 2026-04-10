@@ -67,8 +67,10 @@ void AMyAIController::TakeTurn()
 	{
 		APawn* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
+		//TODO: Just testing out if the offest makes pathfinding any less shit
 		UE_LOG(LogTemp, Display, TEXT("Moving to %s"), *player->GetName());
-		MoveToActor(player, 5.0f);
+		AEnemyCharacter* ch = Cast<AEnemyCharacter>(pawn);
+		MoveToLocation(player->GetActorLocation() + ch->PersonalOffset, 80.0f);
 	}
 	else
 	{
@@ -108,17 +110,18 @@ void AMyAIController::OnDeath(AActor* actor)
 	{
 		GetPawn()->Destroy();
 		RemoveDelegateBinding();
+		Destroy();
 	}
 }
 
 void AMyAIController::BindDelegates()
 {
 	OnTurnChangedBind = CombatSystem->OnTurnChanged.AddUObject(this, &AMyAIController::CheckTurnChanged);
-	OnHealthToZeroBind = CombatSystem->OnHealthToZero.AddUObject(this, &AMyAIController::OnDeath);
+	CombatSystem->OnHealthToZero.AddDynamic(this, &AMyAIController::OnDeath);
 }
 
 void AMyAIController::RemoveDelegateBinding()
 {
-	CombatSystem->OnHealthToZero.Remove(OnHealthToZeroBind);
+	CombatSystem->OnHealthToZero.RemoveDynamic(this, &AMyAIController::OnDeath);
 	CombatSystem->OnTurnChanged.Remove(OnTurnChangedBind);
 }

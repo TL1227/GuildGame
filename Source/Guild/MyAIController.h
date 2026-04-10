@@ -31,7 +31,7 @@ protected:
 	FDelegateHandle OnTurnChangedBind;
 	void CheckTurnChanged(AActor* player);
 
-	FDelegateHandle OnHealthToZeroBind;
+	UFUNCTION()
 	void OnDeath(AActor* actor);
 
 	void BindDelegates();
