@@ -12,6 +12,11 @@ int UTeam::GetId() { return Id; }
 void UTeam::SetMembers(TArray<AActor*> members) { Members = members; }
 void UTeam::AddMember(AActor* member) { Members.Add(member); }
 
+TArray<AActor*> UTeam::GetAllMembers()
+{
+	return Members;
+}
+
 AActor* UTeam::GetCurrentParticipant()
 {
 	if (Members.IsValidIndex(CurrentMemberIndex))

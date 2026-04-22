@@ -50,4 +50,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Move")
 	FVector PersonalOffset;
+
+	UPROPERTY(EditAnywhere, Category = "Move")
+	float AcceptanceRadius;
 };

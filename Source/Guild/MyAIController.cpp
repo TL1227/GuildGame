@@ -19,6 +19,8 @@ void AMyAIController::Tick(float delta)
 {
 	Super::Tick(delta);
 
+	DrawDebugSphere(GetWorld(), MoveTarget, 10.0f, 8, FColor::Magenta);
+
 	if (NeedsToRotate)
 	{
 		FRotator newRot = FMath::RInterpTo(
@@ -70,7 +72,9 @@ void AMyAIController::TakeTurn()
 		//TODO: Just testing out if the offest makes pathfinding any less shit
 		UE_LOG(LogTemp, Display, TEXT("Moving to %s"), *player->GetName());
 		AEnemyCharacter* ch = Cast<AEnemyCharacter>(pawn);
-		MoveToLocation(player->GetActorLocation() + ch->PersonalOffset, 80.0f);
+		auto target = player->GetActorLocation() + ch->PersonalOffset;
+		MoveTarget = target;
+		MoveToLocation(target, ch->AcceptanceRadius);
 	}
 	else
 	{

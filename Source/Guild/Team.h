@@ -26,6 +26,7 @@ public:
 	int GetId();
 	void SetMembers(TArray<AActor*> members);
 	void AddMember(AActor* member);
+	TArray<AActor*> GetAllMembers();
 	AActor* GetCurrentParticipant();
 	AActor* GetNextParticipant();
 	void SetCurrentParticipantIndex(int index);

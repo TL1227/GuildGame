@@ -49,6 +49,18 @@ void AMyPlayerController::BeginPlay()
 		}
 	}
 
+	//set up combat menu widget
+	if (CombatMenuClass)
+	{
+		CombatMenuWidget = CreateWidget<UMenuWidget>(this, CombatMenuClass);
+
+		if (CombatMenuWidget)
+		{
+			CombatMenuWidget->AddToViewport();
+			CombatMenuWidget->Hide();
+		}
+	}
+
 	//camera
 	UpdateBoomArmLengthTrack.BindDynamic(this, &AMyPlayerController::UpdateCameraArmLength);
 	UpdateBoomPitchTrack.BindDynamic(this, &AMyPlayerController::UpdateCameraBoomPitch);
@@ -92,13 +104,33 @@ void AMyPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyPlayerController::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMyPlayerController::Look);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMyPlayerController::Interact);
+
 		EnhancedInputComponent->BindAction(AdvanceDialogueAction, ETriggerEvent::Triggered, this, &AMyPlayerController::AdvanceDialogue);
 		EnhancedInputComponent->BindAction(ComboAttackAction, ETriggerEvent::Triggered, this, &AMyPlayerController::ComboAttackExecute);
+
+		EnhancedInputComponent->BindAction(ConfirmMenuAction, ETriggerEvent::Triggered, this, &AMyPlayerController::ConfirmMenu);
+		EnhancedInputComponent->BindAction(CancelMenuAction, ETriggerEvent::Triggered, this, &AMyPlayerController::CancelMenu);
+		EnhancedInputComponent->BindAction(MenuNavigateAction, ETriggerEvent::Triggered, this, &AMyPlayerController::NavigateMenu);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AMyPlayerController::ConfirmMenu()
+{
+
+}
+
+void AMyPlayerController::CancelMenu()
+{
+
+}
+
+void AMyPlayerController::NavigateMenu(const FInputActionValue& Value)
+{
+	//TODO: see if we can capture up/down/left/right actions using the Value variable
 }
 
 void AMyPlayerController::Interact()
@@ -267,6 +299,11 @@ void AMyPlayerController::StartCombat()
 			{
 				participants.Emplace(combatant);
 			}
+
+		if (CombatMenuWidget)
+			CombatMenuWidget->Show();
+		else
+			UE_LOG(LogTemp, Warning, TEXT("CombatMenuWidget is NULL"));;
 
 		CombatSystem->StartBattle(participants);
 	}

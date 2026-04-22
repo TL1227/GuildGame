@@ -7,6 +7,7 @@
 #include "InputAction.h"
 #include "InputMappingContext.h"
 #include "DialogueWidget.h"
+#include "MenuWidget.h"
 #include "DialogueSystem.h"
 #include "EventZone.h"
 #include "Components/TimelineComponent.h"
@@ -39,6 +40,19 @@ class GUILD_API AMyPlayerController : public APlayerController
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	UInputAction* ComboAttackAction;
 
+	//Menu
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category ="Menu", meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* MenuMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Menu", meta = (AllowPrivateAccess = "true"))
+	UInputAction* MenuNavigateAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Menu", meta = (AllowPrivateAccess = "true"))
+	UInputAction* ConfirmMenuAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Menu", meta = (AllowPrivateAccess = "true"))
+	UInputAction* CancelMenuAction;
+
 	//Dialogue
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dialogue", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DialogueMappingContext;
@@ -54,6 +68,14 @@ class GUILD_API AMyPlayerController : public APlayerController
 
 	UPROPERTY()
 	UDialogueWidget* DialogueWidget = nullptr;
+	
+
+	UPROPERTY(EditDefaultsOnly, Category = "CombatMenu")
+	TSubclassOf<UMenuWidget> CombatMenuClass;
+
+	UPROPERTY()
+	UMenuWidget* CombatMenuWidget = nullptr;
+
 
 	UFUNCTION()
 	void OnDialogueStarted(const FDialogueRow& page);
@@ -105,6 +127,9 @@ protected:
 	void AdvanceDialogue();
 	void SwitchInputMappingContext(UInputMappingContext* context);
 	void ComboAttackExecute();
+	void ConfirmMenu();
+	void CancelMenu();
+	void NavigateMenu(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable)
 	void EndTurn();

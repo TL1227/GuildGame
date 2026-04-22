@@ -30,6 +30,10 @@ public:
 	void RemoveParticipant(AActor* participant);
 	void SetParticipant(AActor* participant);
 
+	UFUNCTION(BlueprintCallable)
+	void FillAllCurrentParticipants(TArray<AActor*>& participants);
+
+
 	UPROPERTY(BlueprintAssignable)
 	FChangeHealth OnHealthChanged;
 

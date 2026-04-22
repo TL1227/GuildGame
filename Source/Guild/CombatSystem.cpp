@@ -68,12 +68,22 @@ AActor* UCombatSystem::GetNextParticipant()
 
 void UCombatSystem::SetParticipant(AActor* participant)
 {
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(
+			-1, 5.0f, 
+			FColor::Yellow, 
+			FString::Printf(TEXT("TURN Team %i Member %i"), TeamIndex, Teams[TeamIndex]->GetCurrentParticipantIndex())
+		);
+	}
+
 	CurrentParticipant = participant;
 	UE_LOG(Combat, Display, TEXT("TURN Team %i Member %i"), TeamIndex, Teams[TeamIndex]->GetCurrentParticipantIndex());
 }
 
 void UCombatSystem::StartBattle(TArray<AActor*> participants)
 {
+	//TODO: write some code to work out number of unique teams in the combatants (prolly use a map)
 	Teams.SetNum(2);
 
 	for (auto* participant : participants)
@@ -100,4 +110,13 @@ void UCombatSystem::RemoveParticipant(AActor* participant)
 	{
 		Teams[combatant->GetTeamId()]->RemoveParticipant(participant);
 	}
+}
+
+void UCombatSystem::FillAllCurrentParticipants(TArray<AActor*>& participants)
+{
+	participants.Empty();
+
+	for (auto* team : Teams)
+		for (auto* member : team->GetAllMembers())
+			participants.Add(member);
 }

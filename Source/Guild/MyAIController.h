@@ -37,6 +37,9 @@ protected:
 	void BindDelegates();
 	void RemoveDelegateBinding();
 
+
+	FVector MoveTarget = { 0.0f, 0.0f, 0.0f };
+
 public:	
 	void BeginPlay() override;
 
