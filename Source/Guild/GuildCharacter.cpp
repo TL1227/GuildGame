@@ -91,6 +91,22 @@ void AGuildCharacter::Tick(float Delta)
 			FVector(0, 1, 0),
 			false
 		);
+		
+		//For the Cyclone thing
+		DrawDebugCircle(
+			GetWorld(),
+			GetActorLocation() - FVector(0.0f, 0.0f, 95.0f), //TODO: get rid of this magic number
+			200, //same as trace
+			64,
+			FColor::Turquoise,
+			false,
+			-1,
+			0,
+			10,
+			FVector(1, 0, 0),
+			FVector(0, 1, 0),
+			false
+		);
 	}
 }
 

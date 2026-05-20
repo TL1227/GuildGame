@@ -117,6 +117,24 @@ void UCombatSystem::FillAllCurrentParticipants(TArray<AActor*>& participants)
 	participants.Empty();
 
 	for (auto* team : Teams)
-		for (auto* member : team->GetAllMembers())
-			participants.Add(member);
+	{
+		if (IsValid(team))
+		{
+			for (auto* member : team->GetAllMembers())
+			{
+				if (IsValid(member))
+				{
+					participants.Add(member);
+				}
+				else
+				{
+					UE_LOG(Combat, Display, TEXT("FillAllCurrentPart() member not valid"));
+				}
+			}
+		}
+		else
+		{
+			UE_LOG(Combat, Display, TEXT("FillAllCurrentPart() team not valid"));
+		}
+	}
 }

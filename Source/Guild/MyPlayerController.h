@@ -68,6 +68,10 @@ class GUILD_API AMyPlayerController : public APlayerController
 
 	UPROPERTY()
 	UDialogueWidget* DialogueWidget = nullptr;
+
+
+	UPROPERTY()
+	TArray<UMenuWidget*> MenuStack;
 	
 
 	UPROPERTY(EditDefaultsOnly, Category = "CombatMenu")
@@ -143,7 +147,7 @@ protected:
 
 	//combat
 	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Combat")
-	AActor* TargetedActor;
+	TArray<AActor*> TargetedActors;
 
 	//camera
 	float CombatCameraPitchToMove;

@@ -120,17 +120,41 @@ void AMyPlayerController::SetupInputComponent()
 
 void AMyPlayerController::ConfirmMenu()
 {
-
+	if (MenuStack.IsEmpty()) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Menu stack is empty"));
+		return;
+	}
+	else
+	{
+		MenuStack.Top()->Confirm();
+	}
 }
 
 void AMyPlayerController::CancelMenu()
 {
-
+	if (MenuStack.IsEmpty()) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Menu stack is empty"));
+		return;
+	}
+	else
+	{
+		MenuStack.Top()->Cancel();
+	}
 }
 
 void AMyPlayerController::NavigateMenu(const FInputActionValue& Value)
 {
-	//TODO: see if we can capture up/down/left/right actions using the Value variable
+	if (MenuStack.IsEmpty()) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Menu stack is empty"));
+		return;
+	}
+	else
+	{
+		MenuStack.Top()->Navigate(Value.Get<FVector2D>());
+	}
 }
 
 void AMyPlayerController::Interact()
@@ -194,13 +218,14 @@ void AMyPlayerController::Look(const FInputActionValue& Value)
 
 void AMyPlayerController::ComboAttackExecute()
 {
-	if (TargetedActor)
+	//NOTE: maybe we want to change the number of targets a combo attack can hit later
+	if (TargetedActors.Num() == 1)
 	{
 		if (AGuildCharacter* gc = Cast<AGuildCharacter>(GetPawn()))
 		{
 			CombatSystem->ApplyDamage(
 				gc->GetCombatantComponent()->GetBaseAttackDamage() * (ComboAttackCount + 1), 
-				TargetedActor
+				TargetedActors[0]
 			);
 
 			if (ComboAttackCount++ >= 2)
@@ -301,9 +326,14 @@ void AMyPlayerController::StartCombat()
 			}
 
 		if (CombatMenuWidget)
+		{
+			MenuStack.Push(CombatMenuWidget);
 			CombatMenuWidget->Show();
+		}
 		else
+		{
 			UE_LOG(LogTemp, Warning, TEXT("CombatMenuWidget is NULL"));;
+		}
 
 		CombatSystem->StartBattle(participants);
 	}
