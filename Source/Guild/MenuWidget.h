@@ -18,7 +18,6 @@ protected:
     UPROPERTY(BlueprintReadWrite)
     int CurrentItemIndex = 0;
 
-
     UFUNCTION(BlueprintCallable)
     void IncreaseIndex();
     
