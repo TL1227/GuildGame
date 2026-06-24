@@ -70,8 +70,6 @@ class GUILD_API AMyPlayerController : public APlayerController
 	UDialogueWidget* DialogueWidget = nullptr;
 
 
-	UPROPERTY()
-	TArray<UMenuWidget*> MenuStack;
 	
 
 	UPROPERTY(EditDefaultsOnly, Category = "CombatMenu")
@@ -90,8 +88,7 @@ class GUILD_API AMyPlayerController : public APlayerController
 	UFUNCTION()
 	void OnDialogueEnded();
 
-	UFUNCTION(BlueprintCallable)
-	void StopInput();
+
 
 	//camera
 	UPROPERTY(EditAnywhere, Category="Camera")
@@ -138,7 +135,15 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EndTurn();
 
+	//input
+	UFUNCTION(BlueprintCallable)
 	void SetCombatInput();
+
+	UFUNCTION(BlueprintCallable)
+	void SetSubMenuInput();
+
+	UFUNCTION(BlueprintCallable)
+	void StopInput();
 
 	void CheckTurnChanged(AActor* player);
 
@@ -148,6 +153,10 @@ protected:
 	//combat
 	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Combat")
 	TArray<AActor*> TargetedActors;
+
+	//menu
+	UPROPERTY(BlueprintReadWrite)
+	TArray<UMenuWidget*> MenuStack;
 
 	//camera
 	float CombatCameraPitchToMove;

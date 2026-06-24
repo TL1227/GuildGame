@@ -113,7 +113,6 @@ void AGuildCharacter::SetCombatMode()
 
 	MovementCircle->Radius = MoveCircleRadius;
 
-
 	InCombat = true;
 }
 

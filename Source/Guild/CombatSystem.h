@@ -37,6 +37,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FChangeHealth OnHealthChanged;
 
+	UFUNCTION(BlueprintCallable)
 	void ApplyDamage(int damage, AActor* actor);
 
 	FTurnChange OnTurnChanged;

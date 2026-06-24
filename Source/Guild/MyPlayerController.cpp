@@ -52,6 +52,7 @@ void AMyPlayerController::BeginPlay()
 	//set up combat menu widget
 	if (CombatMenuClass)
 	{
+		/*
 		CombatMenuWidget = CreateWidget<UMenuWidget>(this, CombatMenuClass);
 
 		if (CombatMenuWidget)
@@ -59,6 +60,7 @@ void AMyPlayerController::BeginPlay()
 			CombatMenuWidget->AddToViewport();
 			CombatMenuWidget->Hide();
 		}
+		*/
 	}
 
 	//camera
@@ -289,14 +291,29 @@ void AMyPlayerController::SetCombatInput()
 {
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
+		Subsystem->ClearAllMappings();
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		Subsystem->AddMappingContext(CombatMappingContext, 1);
-
 		UE_LOG(LogTemp, Display, TEXT("Set CombatInput"));
 	}
 	else
 	{
 		UE_LOG(LogTemp, Display, TEXT("Set CombatInput Failed"));
+	}
+}
+
+void AMyPlayerController::SetSubMenuInput()
+{
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		Subsystem->ClearAllMappings();
+		Subsystem->AddMappingContext(MenuMappingContext, 0);
+
+		UE_LOG(LogTemp, Display, TEXT("Set MenuMappingContext"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("Set MenuMappingContect Failed"));
 	}
 }
 
@@ -324,6 +341,14 @@ void AMyPlayerController::StartCombat()
 			{
 				participants.Emplace(combatant);
 			}
+
+		//menu
+		CombatMenuWidget = CreateWidget<UMenuWidget>(this, CombatMenuClass);
+		if (CombatMenuWidget)
+		{
+			CombatMenuWidget->AddToViewport();
+			CombatMenuWidget->Hide();
+		}
 
 		if (CombatMenuWidget)
 		{
