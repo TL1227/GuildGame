@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "GuildCharacter.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
@@ -15,9 +13,6 @@
 #include "Combatant.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
-
-//////////////////////////////////////////////////////////////////////////
-// AGuildCharacter
 
 AGuildCharacter::AGuildCharacter()
 {
@@ -99,6 +94,11 @@ void AGuildCharacter::SetExploreMode()
 	GetCapsuleComponent()->SetCapsuleRadius(ExploreCapsuleRadius);
 }
 
+void AGuildCharacter::MeleeAttack()
+{
+	MeleeAoe->CastAoe();
+}
+
 //TODO: this should probably subscribe to some OnCombatStart function from our BattleSystem
 void AGuildCharacter::SetCombatMode()
 {
@@ -112,6 +112,16 @@ void AGuildCharacter::SetCombatMode()
 	);
 
 	MovementCircle->Radius = MoveCircleRadius;
+	
+	if (!MeleeAoe && MeleeAoeClass)
+	{
+		MeleeAoe = GetWorld()->SpawnActor<AAoe>(MeleeAoeClass);
+
+		MeleeAoe->AttachToComponent(
+			GetRootComponent(),
+			FAttachmentTransformRules::KeepRelativeTransform
+		);
+	}
 
 	InCombat = true;
 }

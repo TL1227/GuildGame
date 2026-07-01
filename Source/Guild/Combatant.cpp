@@ -18,6 +18,22 @@ void UCombatant::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+int UCombatant::IncrementActionsTaken()
+{
+	return ++ActionsCount;
+}
+
+int UCombatant::DecrementActionsTaken()
+{
+	if (--ActionsCount < 0) ActionsCount = 0;
+	return ActionsCount;
+}
+
+void UCombatant::ResetActionsTaken()
+{
+	ActionsCount = 0;
+}
+
 void UCombatant::ChangeHealthPoints(int points)
 {
 	UE_LOG(LogTemp, Display, TEXT("Took %i damage"), points);

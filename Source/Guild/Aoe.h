@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+//#include "CombatSystem.h"
 #include "GameFramework/Actor.h"
 #include "Aoe.generated.h"
 
@@ -22,7 +23,14 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	TArray<AActor*> GetHitActors();
 
+	//UCombatSystem CombatSystem;
+
+	void CheckTurnChanged();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CastAoe();
 };

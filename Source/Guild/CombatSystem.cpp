@@ -29,7 +29,47 @@ void UCombatSystem::ApplyDamage(int damage, AActor* target)
 		}
 		else
 		{
-			UE_LOG(Combat, Display, TEXT("Doesn't have a CombatantComponant: %s"), *combatant->GetName());;
+			UE_LOG(Combat, Display, TEXT("Doesn't have a CombatantComponant: %s"), *combatant->GetName());
+		}
+	}
+}
+
+void UCombatSystem::InceaseCurrentParticipantActionCount()
+{
+	if (auto participant = CurrentParticipant->GetComponentByClass<UCombatant>())
+	{
+		int actionsTaken = participant->IncrementActionsTaken();
+
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1, 5.0f,
+				FColor::Blue,
+				FString::Printf(TEXT("Actions Taken %i"), actionsTaken)
+			);
+		}
+
+		if (actionsTaken >= Max_Actions)
+		{
+			participant->ResetActionsTaken();
+			EndTurn();
+		}
+	}
+}
+
+void UCombatSystem::DecreaseCurrentParticipantActionCount()
+{
+	if (auto participant = CurrentParticipant->GetComponentByClass<UCombatant>())
+	{
+		int actionsTaken = participant->DecrementActionsTaken();
+
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1, 5.0f,
+				FColor::Blue,
+				FString::Printf(TEXT("Actions Taken %i"), actionsTaken)
+			);
 		}
 	}
 }
@@ -102,6 +142,8 @@ void UCombatSystem::StartBattle(TArray<AActor*> participants)
 	TeamCount = Teams.Num();
 	Teams[TeamIndex]->SetCurrentParticipantIndex(0);
 	SetParticipant(Teams[TeamIndex]->GetCurrentParticipant());
+
+	CombatStarted = true;
 }
 
 void UCombatSystem::RemoveParticipant(AActor* participant)

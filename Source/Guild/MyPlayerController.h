@@ -154,6 +154,9 @@ protected:
 	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Combat")
 	TArray<AActor*> TargetedActors;
 
+	bool HasMovedThisTurn = false;
+	FTransform TurnStartPosition;
+
 	//menu
 	UPROPERTY(BlueprintReadWrite)
 	TArray<UMenuWidget*> MenuStack;

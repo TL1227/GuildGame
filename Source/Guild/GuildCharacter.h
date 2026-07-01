@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Aoe.h"
 #include "GuildCharacter.generated.h"
 
 class USpringArmComponent;
@@ -42,6 +43,7 @@ class AGuildCharacter : public ACharacter
 public:
 	AGuildCharacter();
 
+	void MeleeAttack();
 	
 protected:
 	virtual void BeginPlay();
@@ -52,6 +54,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	class UCombatant* CombatantComponent;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	AAoe* MeleeAoe;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	TSubclassOf<AAoe> MeleeAoeClass;
 
 public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

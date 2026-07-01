@@ -195,6 +195,16 @@ void AMyPlayerController::OnDialogueEnded()
 
 void AMyPlayerController::Move(const FInputActionValue& Value)
 {
+	//TODO: There should probably be a combat move so we're not checking this every frame during normal play
+	if (!HasMovedThisTurn && CombatSystem)
+	{
+		if (CombatSystem->CombatStarted)
+		{
+			CombatSystem->InceaseCurrentParticipantActionCount();
+			HasMovedThisTurn = true;
+		}
+	}
+
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	// find out which way is forward
@@ -221,18 +231,11 @@ void AMyPlayerController::Look(const FInputActionValue& Value)
 void AMyPlayerController::ComboAttackExecute()
 {
 	//NOTE: maybe we want to change the number of targets a combo attack can hit later
-	if (TargetedActors.Num() == 1)
-	{
-		if (AGuildCharacter* gc = Cast<AGuildCharacter>(GetPawn()))
-		{
-			CombatSystem->ApplyDamage(
-				gc->GetCombatantComponent()->GetBaseAttackDamage() * (ComboAttackCount + 1), 
-				TargetedActors[0]
-			);
 
-			if (ComboAttackCount++ >= 2)
-				EndTurn();
-		}
+	if (AGuildCharacter* character = Cast<AGuildCharacter>(GetPawn()))
+	{
+		character->MeleeAttack();
+		//NOTE: maybe some bool here to say we've started the combo?
 	}
 }
 
@@ -371,6 +374,12 @@ void AMyPlayerController::CheckTurnChanged(AActor* player)
 	{
 		UE_LOG(LogTemp, Display, TEXT("it's %s turn"), *player->GetName());
 
+		HasMovedThisTurn = false;
+		TurnStartPosition = GetPawn()->GetTransform();
 		SetCombatInput();
+	}
+	else
+	{
+		StopInput();
 	}
 }

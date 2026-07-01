@@ -28,6 +28,15 @@ public:
 	void SetTeamId(int id);
 	int GetTeamId();
 
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	int GetBaseAttackDamage();
+
+	int IncrementActionsTaken();
+	int DecrementActionsTaken();
+	void ResetActionsTaken();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -44,9 +53,5 @@ protected:
 	UPROPERTY(EditAnywhere, BluePrintReadWrite)
 	int TeamId = 0;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	int GetBaseAttackDamage();
+	int ActionsCount = 0;
 };

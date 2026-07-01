@@ -33,6 +33,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FillAllCurrentParticipants(TArray<AActor*>& participants);
 
+	UFUNCTION(BlueprintCallable)
+	void InceaseCurrentParticipantActionCount();
+
+	UFUNCTION(BlueprintCallable)
+	void DecreaseCurrentParticipantActionCount();
 
 	UPROPERTY(BlueprintAssignable)
 	FChangeHealth OnHealthChanged;
@@ -41,6 +46,8 @@ public:
 	void ApplyDamage(int damage, AActor* actor);
 
 	FTurnChange OnTurnChanged;
+
+	UFUNCTION(BlueprintCallable)
 	void EndTurn();
 
 	UPROPERTY(BlueprintAssignable)
@@ -52,5 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Combat")
 	void StartBattle(TArray<AActor*> participants);
 
+	bool CombatStarted = false;
+
 	AActor* GetNextParticipant();
+
+	int Max_Actions = 2;
 };
