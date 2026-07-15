@@ -38,6 +38,9 @@ class GUILD_API AMyPlayerController : public APlayerController
 	UInputMappingContext* CombatMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* ComboMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	UInputAction* ComboAttackAction;
 
 	//Menu
@@ -126,11 +129,13 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void Interact();
 	void AdvanceDialogue();
-	void SwitchInputMappingContext(UInputMappingContext* context);
 	void ComboAttackExecute();
 	void ConfirmMenu();
 	void CancelMenu();
 	void NavigateMenu(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
+	void SwitchInputMappingContext(UInputMappingContext* context);
 
 	UFUNCTION(BlueprintCallable)
 	void EndTurn();

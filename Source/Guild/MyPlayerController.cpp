@@ -2,24 +2,24 @@
 
 #include "MyPlayerController.h"
 
-#include "GuildCharacter.h"
-#include "Engine/LocalPlayer.h"
-#include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "GameFramework/Controller.h"
-#include "EnhancedInputComponent.h"
-#include "EnhancedInputSubsystems.h"
-#include "InputActionValue.h"
-#include "Npc.h"
-#include "Components/ArrowComponent.h"
 #include "Camera/CameraActor.h"
-#include "Kismet/GameplayStatics.h"
-#include "EnemyCharacter.h"
-#include "MovementCircle.h"
+#include "Camera/CameraComponent.h"
 #include "CombatSystem.h"
 #include "Combatant.h"
+#include "Components/ArrowComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "EnemyCharacter.h"
+#include "Engine/LocalPlayer.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Controller.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "GuildCharacter.h"
+#include "InputActionValue.h"
+#include "Kismet/GameplayStatics.h"
+#include "MovementCircle.h"
+#include "Npc.h"
 #include "Team.h"
 
 AMyPlayerController::AMyPlayerController()
@@ -49,21 +49,7 @@ void AMyPlayerController::BeginPlay()
 		}
 	}
 
-	//set up combat menu widget
-	if (CombatMenuClass)
-	{
-		/*
-		CombatMenuWidget = CreateWidget<UMenuWidget>(this, CombatMenuClass);
-
-		if (CombatMenuWidget)
-		{
-			CombatMenuWidget->AddToViewport();
-			CombatMenuWidget->Hide();
-		}
-		*/
-	}
-
-	//camera
+	//camera---
 	UpdateBoomArmLengthTrack.BindDynamic(this, &AMyPlayerController::UpdateCameraArmLength);
 	UpdateBoomPitchTrack.BindDynamic(this, &AMyPlayerController::UpdateCameraBoomPitch);
 	CombatTransitionEnded.BindDynamic(this, &AMyPlayerController::StartCombat);
@@ -71,9 +57,10 @@ void AMyPlayerController::BeginPlay()
 	CombatCameraTransition->AddInterpFloat(CameraBoomArmLengthCurve, UpdateBoomArmLengthTrack);
 	CombatCameraTransition->AddInterpFloat(CameraBoomPitchCurve, UpdateBoomPitchTrack);
 	CombatCameraTransition->SetTimelineFinishedFunc(CombatTransitionEnded);
+	//---------
 
 	CombatSystem = GetGameInstance()->GetSubsystem<UCombatSystem>();
-	CombatSystem->OnTurnChanged.AddUObject(this, &AMyPlayerController::CheckTurnChanged);
+	CombatSystem->OnTurnChanged.AddDynamic(this, &AMyPlayerController::CheckTurnChanged);
 }
 
 void AMyPlayerController::Tick(float DeltaTime)

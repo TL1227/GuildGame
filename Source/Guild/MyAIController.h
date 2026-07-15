@@ -29,6 +29,7 @@ protected:
 	
 	//delegate binding
 	FDelegateHandle OnTurnChangedBind;
+	UFUNCTION()
 	void CheckTurnChanged(AActor* player);
 
 	UFUNCTION()

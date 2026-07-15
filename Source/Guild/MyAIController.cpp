@@ -120,12 +120,12 @@ void AMyAIController::OnDeath(AActor* actor)
 
 void AMyAIController::BindDelegates()
 {
-	OnTurnChangedBind = CombatSystem->OnTurnChanged.AddUObject(this, &AMyAIController::CheckTurnChanged);
+	CombatSystem->OnTurnChanged.AddDynamic(this, &AMyAIController::CheckTurnChanged);
 	CombatSystem->OnHealthToZero.AddDynamic(this, &AMyAIController::OnDeath);
 }
 
 void AMyAIController::RemoveDelegateBinding()
 {
+	CombatSystem->OnTurnChanged.RemoveDynamic(this, &AMyAIController::CheckTurnChanged);
 	CombatSystem->OnHealthToZero.RemoveDynamic(this, &AMyAIController::OnDeath);
-	CombatSystem->OnTurnChanged.Remove(OnTurnChangedBind);
 }

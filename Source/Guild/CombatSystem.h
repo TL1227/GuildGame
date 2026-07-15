@@ -6,7 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "CombatSystem.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FTurnChange, AActor*);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTeamChange, int, TeamIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurnChange, AActor*, CurrentTurnActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FZeroHealth, AActor*, DeadActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FChangeHealth, int, Damage, AActor*, Target);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBattleStart);
@@ -45,7 +46,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ApplyDamage(int damage, AActor* actor);
 
+	UPROPERTY(BlueprintAssignable)
 	FTurnChange OnTurnChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FTeamChange OnTeamChanged;
 
 	UFUNCTION(BlueprintCallable)
 	void EndTurn();

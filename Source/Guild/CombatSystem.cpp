@@ -74,7 +74,7 @@ void UCombatSystem::DecreaseCurrentParticipantActionCount()
 	}
 }
 
-void UCombatSystem::EndTurn() //TODO: maybe NextTurn() ?
+void UCombatSystem::EndTurn()
 {
 	SetParticipant(GetNextParticipant());
 	OnTurnChanged.Broadcast(CurrentParticipant);
@@ -100,6 +100,8 @@ AActor* UCombatSystem::GetNextParticipant()
 		{
 			TeamIndex = 0;
 		}
+
+		OnTeamChanged.Broadcast(TeamIndex);
 
 		UE_LOG(Combat, Display, TEXT("TeamIndex is now %i"), TeamIndex);
 		return Teams[TeamIndex]->GetCurrentParticipant();
@@ -144,6 +146,8 @@ void UCombatSystem::StartBattle(TArray<AActor*> participants)
 	SetParticipant(Teams[TeamIndex]->GetCurrentParticipant());
 
 	CombatStarted = true;
+
+	OnBattleStarted.Broadcast();
 }
 
 void UCombatSystem::RemoveParticipant(AActor* participant)

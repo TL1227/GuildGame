@@ -69,24 +69,6 @@ void AGuildCharacter::Tick(float Delta)
 		SetActorLocation(MovementCircle->ClampToBounds(GetActorLocation(), CapRadius));
 		
 	}
-	
-	if (InCombat)
-	{
-		DrawDebugCircle(
-			GetWorld(),
-			GetActorLocation() - FVector(0.0f, 0.0f, 95.0f), //TODO: get rid of this magic number
-			GetCapsuleComponent()->GetUnscaledCapsuleRadius(),
-			64,
-			CircleColour,
-			false,
-			-1,
-			0,
-			3,
-			FVector(1, 0, 0),
-			FVector(0, 1, 0),
-			false
-		);
-	}
 }
 
 void AGuildCharacter::SetExploreMode()
