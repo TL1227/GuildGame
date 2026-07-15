@@ -1,6 +1,6 @@
 # GuildGame
 
-![Screenshot](/ReadmeImages/Screenshot.png)
+![Screenshot](/ReadmeImages/Screenshot2.png)
 
 A third-person tactical RPG with positioning-heavy combat inspired by Divinity: Original Sin and tabletop RPGs. Built in Unreal Engine.
 
