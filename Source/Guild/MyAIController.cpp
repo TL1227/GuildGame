@@ -37,14 +37,6 @@ void AMyAIController::Tick(float delta)
 		if (newRot.Equals(TargetRotation, 2.0f))
 		{
 			NeedsToRotate = false;
-
-			APawn* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-
-			if (AEnemyCharacter* ch = Cast<AEnemyCharacter>(GetPawn()))
-			{
-				CombatSystem->ApplyDamage(ch->GetCombatantComponent()->GetBaseAttackDamage(), player);
-				CombatSystem->EndTurn();
-			}
 		}
 	}
 }
@@ -97,14 +89,21 @@ void AMyAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowi
 			UE_LOG(LogTemp, Display, TEXT("Rotating!!!"));
 			NeedsToRotate = true;
 		}
-		else
+
+		if (AEnemyCharacter* ch = Cast<AEnemyCharacter>(GetPawn()))
 		{
-			if (AEnemyCharacter* ch = Cast<AEnemyCharacter>(GetPawn()))
-			{
-				CombatSystem->ApplyDamage(ch->GetCombatantComponent()->GetBaseAttackDamage(), player);
-				CombatSystem->EndTurn();
-			}
+			StartMeleeAttack();
 		}
+	}
+}
+
+void AMyAIController::EndMeleeAttack()
+{
+	if (AEnemyCharacter* ch = Cast<AEnemyCharacter>(GetPawn()))
+	{
+		APawn* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+		CombatSystem->ApplyDamage(ch->GetCombatantComponent()->GetBaseAttackDamage(), player);
+		CombatSystem->EndTurn();
 	}
 }
 

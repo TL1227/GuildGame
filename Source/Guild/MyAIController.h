@@ -32,6 +32,12 @@ protected:
 	UFUNCTION()
 	void CheckTurnChanged(AActor* player);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartMeleeAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void EndMeleeAttack();
+
 	UFUNCTION()
 	void OnDeath(AActor* actor);
 

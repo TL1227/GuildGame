@@ -74,10 +74,41 @@ void UCombatSystem::DecreaseCurrentParticipantActionCount()
 	}
 }
 
+void UCombatSystem::ChangeTeam(int teamIndex)
+{
+	OnTurnChanged.Broadcast(CurrentParticipant);
+	OnTeamChanged.Broadcast(TeamIndex);
+}
+
 void UCombatSystem::EndTurn()
 {
-	SetParticipant(GetNextParticipant());
-	OnTurnChanged.Broadcast(CurrentParticipant);
+	if (auto combatant = CurrentParticipant->GetComponentByClass<UCombatant>())
+	{
+		int currentIndex = TeamIndex;
+		AActor* next = GetNextParticipant();
+		SetParticipant(next);
+
+		if (TeamIndex == currentIndex)
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1, 5.0f,
+				FColor::Yellow,
+				FString::Printf(TEXT("EndTurn() NOT Changing Teams!!!"), TeamIndex, Teams[TeamIndex]->GetCurrentParticipantIndex())
+			);
+
+			OnTurnChanged.Broadcast(CurrentParticipant);
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1, 5.0f,
+				FColor::Yellow,
+				FString::Printf(TEXT("EndTurn() Changing Teams!!!"), TeamIndex, Teams[TeamIndex]->GetCurrentParticipantIndex())
+			);
+
+			StartTeamChangeTransition.Broadcast(TeamIndex);
+		}
+	}
 }
 
 AActor* UCombatSystem::GetNextParticipant()
@@ -100,8 +131,6 @@ AActor* UCombatSystem::GetNextParticipant()
 		{
 			TeamIndex = 0;
 		}
-
-		OnTeamChanged.Broadcast(TeamIndex);
 
 		UE_LOG(Combat, Display, TEXT("TeamIndex is now %i"), TeamIndex);
 		return Teams[TeamIndex]->GetCurrentParticipant();
